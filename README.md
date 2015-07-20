@@ -1,6 +1,6 @@
 frontend-nanodegree-arcade-game
 ===============================
 
-Students should use this rubric: https://www.udacity.com/course/viewer#!/c-ud015/l-3072058665/m-3072588797
+Remake of classic Frogger arcade game.
 
-for self-checking their submission.
+Rubric: https://www.udacity.com/course/viewer#!/c-ud015/l-3072058665/m-3072588797
