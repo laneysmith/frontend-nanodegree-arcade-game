@@ -10,11 +10,11 @@
     this.height = 83;                      // Set height of sprite
 
     this.dt = getRandomArbitrary(2, 8);   // Random speed
-};
 
-function getRandomArbitrary(min, max) {
-  return Math.random() * (max - min) + min;
-}
+    function getRandomArbitrary(min, max) {
+      return Math.random() * (max - min) + min;
+    }
+};
 
 
  // Update the enemy's position, required method for game
@@ -28,6 +28,33 @@ function getRandomArbitrary(min, max) {
         this.x = -101;
     } else {
         this.x = this.x + this.dt;
+    }
+
+    // Checks to see if collisions occur between player & enemy.
+    function checkCollisions() {
+        // For loop iterates through enemy array for collisions with player.
+        for (var n = 0; n < allEnemies.length; n++) {
+            // First if statement checks to see if the x coordinate of player
+            // matches the x coordinate of the enemy. If this is true, the second
+            // if statement checks to see if the y coordinate of the player matches
+            // the y coordinate of the enemy. If both are true, player is reset
+            // to initial position, score is checked to see if there's a new high
+            // score, & score is reset to 0.
+            if (player.x + 30 > allEnemies[n].x && player.x < allEnemies[n].x + allEnemies[n].width - 30) {
+                if (player.y < allEnemies[n].y + 20 && player.y > allEnemies[n].y - 20) {
+                    // Reset player to initial coordinates.
+                    Player.prototype.reset();
+                    // If final score is greater than current high score, record
+                    // new high score.
+                    if (score > maxScore) {
+                      maxScore = score;
+                    }
+                    // Reset score to 0.
+                    score = 0;
+
+                }
+            }
+        }
     }
 
     // Calls a function to check if collision occurs between player & enemy.
@@ -70,7 +97,6 @@ Player.prototype.update = function(dt) {
 // Also displays the directions, scoreboard, & high score.
 Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite[this.currentSpriteIndex]), this.x, this.y);
-
     directions();
     scoreBoard();
     highScore();
@@ -102,7 +128,7 @@ Player.prototype.handleInput = function(keyStroke) {
         if (this.y > 83) {
             this.y = this.y - 83;
         } else {
-            resetPlayer();
+            Player.prototype.reset();
             score = score + 1;
         }
     }
@@ -157,41 +183,17 @@ document.addEventListener('keyup', function(e) {
 });
 
 
-// Checks to see if collisions occur between player & enemy.
-// Called by enemy.update
-function checkCollisions() {
-    // For loop iterates through enemy array for collisions with player.
-    for (var n = 0; n < allEnemies.length; n++) {
-        // First if statement checks to see if the x coordinate of player
-        // matches the x coordinate of the enemy. If this is true, the second
-        // if statement checks to see if the y coordinate of the player matches
-        // the y coordinate of the enemy. If both are true, player is reset
-        // to initial position, score is checked to see if there's a new high
-        // score, & score is reset to 0.
-        if (player.x + 30 > allEnemies[n].x && player.x < allEnemies[n].x + allEnemies[n].width - 30) {
-            if (player.y < allEnemies[n].y + 20 && player.y > allEnemies[n].y - 20) {
-                // Reset player to initial coordinates.
-                resetPlayer();
-                // If final score is greater than current high score, record
-                // new high score.
-                if (score > maxScore) {
-                  maxScore = score;
-                }
-                // Reset score to 0.
-                score = 0;
-
-            }
-        }
-    }
-}
-
-
 // Reset player's position after collision or successful crossing.
 // Called by checkCollisions & Player.handleInput
-function resetPlayer() {
-    player.x = playerInitialX;      //player's starting x coordinate
-    player.y = playerInitialY;      //player's starting y coordinate
-}
+Player.prototype.reset = function() {
+      player.x = playerInitialX;      //player's starting x coordinate
+      player.y = playerInitialY;      //player's starting y coordinate
+  }
+
+//function resetPlayer() {
+//    player.x = playerInitialX;      //player's starting x coordinate
+//    player.y = playerInitialY;      //player's starting y coordinate
+//}
 
 
 var score = 0;                      // Initialize score
